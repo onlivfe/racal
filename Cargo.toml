@@ -6,7 +6,7 @@ license = "MPL-2.0"
 authors = ["ljoonal"]
 description = "REST API client abstraction library"
 repository = "https://github.com/onlivfe/racal"
-keywords = ["api", "declarative", "rest", "http", "api", "abstraction"]
+keywords = ["api", "declarative", "rest", "http", "abstraction"]
 categories = ["api-bindings", "network-programming", "web-programming::http-client"]
 
 include = ["src", "Cargo.toml", "LICENSE", "README.md"]
