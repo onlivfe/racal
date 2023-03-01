@@ -16,6 +16,11 @@
 
 use serde::de::DeserializeOwned;
 
+#[cfg(feature = "reqwest")]
+mod reqwest;
+#[cfg(feature = "reqwest")]
+pub use crate::reqwest::*;
+
 /// Possible request methods
 #[derive(Debug, Clone)]
 pub enum RequestMethod {
@@ -48,18 +53,22 @@ pub trait Queryable<RequiredApiState, ResponseType: DeserializeOwned> {
 	/// Creates a JSON body for the request
 	///
 	/// Defaults to no body.
-	fn body(&self, _state: &RequiredApiState) -> Option<serde_json::Result<Vec<u8>>> {
+	fn body(
+		&self, _state: &RequiredApiState,
+	) -> Option<serde_json::Result<Vec<u8>>> {
 		None
 	}
 
-	/// Deserializes the API response into the struct, by default using `serde_json`.
-	/// Required to allow deserializing empty tuples for example,
+	/// Deserializes the API response into the struct, by default using
+	/// `serde_json`. Required to allow deserializing empty tuples for example,
 	/// because [`serde_json` considers empty values to not be valid JSON](https://github.com/serde-rs/json/issues/903).
 	///
 	/// # Errors
-	/// 
+	///
 	/// If deserializing fails
-	fn deserialize(&self, data: &[u8]) -> serde_json::Result<ResponseType> {
-		serde_json::from_slice(data)
+	fn deserialize(
+		&self, data: serde_json::Value,
+	) -> serde_json::Result<ResponseType> {
+		serde_json::from_value(data)
 	}
 }
