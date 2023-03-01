@@ -17,9 +17,7 @@
 use serde::de::DeserializeOwned;
 
 #[cfg(feature = "reqwest")]
-mod reqwest;
-#[cfg(feature = "reqwest")]
-pub use crate::reqwest::*;
+pub mod reqwest;
 
 /// Possible request methods
 #[derive(Debug, Clone)]
