@@ -2,7 +2,7 @@
 //!
 //! This is a very minimal crate
 
-#![cfg_attr(nightly, feature(doc_cfg))]
+#![cfg_attr(nightly, feature(doc_auto_cfg))]
 #![deny(clippy::all)]
 #![forbid(unsafe_code)]
 #![deny(clippy::cargo)]
