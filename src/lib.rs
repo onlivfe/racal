@@ -70,3 +70,11 @@ pub trait Queryable<RequiredApiState, ResponseType: DeserializeOwned> {
 		serde_json::from_value(data)
 	}
 }
+
+/// A trait that should be implemented for API states,
+/// to support giving access to the API state to the queryables.
+pub trait FromApiState<ApiState> {
+	/// Gets the wanted state (`Self`) from the current `ApiState`,
+	/// by borrowing if possible
+	fn from_state(state: &ApiState) -> &Self;
+}
