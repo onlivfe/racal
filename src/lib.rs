@@ -58,16 +58,16 @@ pub trait Queryable<RequiredApiState, ResponseType: DeserializeOwned> {
 	}
 
 	/// Deserializes the API response into the struct, by default using
-	/// `serde_json`. Required to allow deserializing empty tuples for example,
+	/// `serde_json`.
+	///
+	/// Required to allow deserializing empty tuples for example,
 	/// because [`serde_json` considers empty values to not be valid JSON](https://github.com/serde-rs/json/issues/903).
 	///
 	/// # Errors
 	///
 	/// If deserializing fails
-	fn deserialize(
-		&self, data: serde_json::Value,
-	) -> serde_json::Result<ResponseType> {
-		serde_json::from_value(data)
+	fn deserialize(&self, data: &[u8]) -> serde_json::Result<ResponseType> {
+		serde_json::from_slice(data)
 	}
 }
 

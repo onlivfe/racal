@@ -86,8 +86,8 @@ pub trait ApiClient<State> {
 		QueryableType: Queryable<FromState, ReturnType> + Send + Sync,
 	{
 		let response = response.error_for_status()?;
-		let val: serde_json::Value = response.json().await?;
-		Ok(queryable.deserialize(val)?)
+		let val = response.bytes().await?;
+		Ok(queryable.deserialize(&val)?)
 	}
 
 	/// Creates a query
