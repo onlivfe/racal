@@ -35,5 +35,5 @@ default-features = false
 features = ["json"]
 
 [package.metadata.docs.rs]
-features = ["reqwest"]
+all-features = true
 rustdoc-args = ["--cfg", "nightly"]
