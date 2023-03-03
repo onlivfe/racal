@@ -26,31 +26,6 @@ impl From<reqwest::Error> for ApiError {
 	fn from(err: reqwest::Error) -> Self { Self::Reqwest(err) }
 }
 
-fn build_request<ReturnType, ApiState, QueryableType>(
-	http: &Client, api_state: &ApiState, queryable: &QueryableType,
-) -> Result<RequestBuilder, ApiError>
-where
-	ReturnType: DeserializeOwned,
-	QueryableType: Queryable<ApiState, ReturnType> + Send + Sync,
-{
-	let mut request = http.request(
-		match queryable.method(api_state) {
-			RequestMethod::Get => reqwest::Method::GET,
-			RequestMethod::Head => reqwest::Method::HEAD,
-			RequestMethod::Patch => reqwest::Method::PATCH,
-			RequestMethod::Post => reqwest::Method::POST,
-			RequestMethod::Put => reqwest::Method::PUT,
-			RequestMethod::Delete => reqwest::Method::DELETE,
-		},
-		queryable.url(api_state),
-	);
-	if let Some(body) = queryable.body(api_state) {
-		request = request.body(body?);
-	}
-
-	Ok(request)
-}
-
 /// An API client that can be used to create queries
 #[async_trait::async_trait]
 pub trait ApiClient<State> {
@@ -99,7 +74,7 @@ pub trait ApiClient<State> {
 		FromState: FromApiState<State>,
 		QueryableType: Queryable<FromState, ReturnType> + Send + Sync,
 	{
-		let request = build_request::<ReturnType, FromState, QueryableType>(
+		let request = Self::build_request(
 			self.client(),
 			FromState::from_state(self.state()),
 			&queryable,
@@ -108,5 +83,32 @@ pub trait ApiClient<State> {
 		let response = request.send().await?;
 
 		self.handle_response(queryable, response).await
+	}
+
+	/// Builds the base request
+	fn build_request<ReturnType, FromState, QueryableType>(
+		http: &Client, api_state: &FromState, queryable: &QueryableType,
+	) -> Result<RequestBuilder, ApiError>
+	where
+		ReturnType: DeserializeOwned,
+		FromState: FromApiState<State>,
+		QueryableType: Queryable<FromState, ReturnType> + Send + Sync,
+	{
+		let mut request = http.request(
+			match queryable.method(api_state) {
+				RequestMethod::Get => reqwest::Method::GET,
+				RequestMethod::Head => reqwest::Method::HEAD,
+				RequestMethod::Patch => reqwest::Method::PATCH,
+				RequestMethod::Post => reqwest::Method::POST,
+				RequestMethod::Put => reqwest::Method::PUT,
+				RequestMethod::Delete => reqwest::Method::DELETE,
+			},
+			queryable.url(api_state),
+		);
+		if let Some(body) = queryable.body(api_state) {
+			request = request.body(body?);
+		}
+
+		Ok(request)
 	}
 }
