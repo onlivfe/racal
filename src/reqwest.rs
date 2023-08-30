@@ -106,7 +106,7 @@ pub trait ApiClient<State> {
 			queryable.url(api_state),
 		);
 		if let Some(body) = queryable.body(api_state) {
-			request = request.body(body?);
+			request = request.body(body?).header("Content-Type", "application/json");
 		}
 
 		Ok(request)
