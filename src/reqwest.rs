@@ -6,15 +6,19 @@
 
 use reqwest::{Client, RequestBuilder, Response};
 use serde::de::DeserializeOwned;
+use thiserror::Error;
 
 use crate::{FromApiState, Queryable, RequestMethod};
 
 /// An error that may happen with an API query
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum ApiError {
 	/// An error happened with serialization
+	#[error("An error happened with serialization")]
 	Serde(serde_json::Error),
+
 	/// An error happened with the request itself
+	#[error("An error happened with the request itself")]
 	Reqwest(reqwest::Error),
 }
 
