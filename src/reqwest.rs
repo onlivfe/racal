@@ -90,6 +90,10 @@ pub trait ApiClient<State> {
 	}
 
 	/// Builds the base request
+	///
+	/// # Errors
+	///
+	/// If body cannot be set for the request
 	fn build_request<ReturnType, FromState, QueryableType>(
 		http: &Client, api_state: &FromState, queryable: &QueryableType,
 	) -> Result<RequestBuilder, ApiError>
