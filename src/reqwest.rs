@@ -14,11 +14,11 @@ use crate::{FromApiState, Queryable, RequestMethod};
 #[derive(Debug, Error)]
 pub enum ApiError {
 	/// An error happened with serialization
-	#[error("An error happened with serialization")]
+	#[error("An error happened with serialization: {0}")]
 	Serde(serde_json::Error),
 
 	/// An error happened with the request itself
-	#[error("An error happened with the request itself")]
+	#[error("An error happened with the request itself: {0}")]
 	Reqwest(reqwest::Error),
 }
 
