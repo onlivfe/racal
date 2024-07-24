@@ -2,6 +2,8 @@
 //!
 //! This is a very minimal crate
 
+// We use a custom `nightly` CFG to gate doc_auto_cfg to only supported
+#![allow(unexpected_cfgs)]
 #![cfg_attr(nightly, feature(doc_auto_cfg))]
 #![deny(clippy::all)]
 #![forbid(unsafe_code)]
