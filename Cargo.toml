@@ -31,7 +31,7 @@ async-trait = { version = "0.1", optional = true }
 
 [dependencies.reqwest]
 optional = true
-version = "0.12.5"
+version = "0.12.7"
 default-features = false
 features = ["json"]
 
