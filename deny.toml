@@ -1,4 +1,7 @@
 # See https://embarkstudios.github.io/cargo-deny/checks/cfg.html
+[graph]
+all-features = true
+
 [advisories]
 version = 2
 
@@ -7,11 +10,20 @@ version = 2
 # See https://spdx.org/licenses/ for list of possible licenses
 allow = [
 	"MIT",
+	"ISC",
+	"BSD-3-Clause",
 	"Apache-2.0",
 	"MPL-2.0",
-	"Unicode-3.0"
+	"Unicode-3.0",
+	"OpenSSL"
 ]
 confidence-threshold = 0.8
+
+[[licenses.clarify]]
+name = "ring"
+version = "*"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = []
 
 [bans]
 multiple-versions = "warn"
