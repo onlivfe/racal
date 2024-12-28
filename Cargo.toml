@@ -33,7 +33,7 @@ async-trait = { version = "0.1.83", optional = true }
 optional = true
 version = "0.12.11"
 default-features = false
-features = ["json"]
+features = ["json", "rustls-tls"]
 
 [package.metadata.docs.rs]
 all-features = true
